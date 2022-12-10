@@ -6,3 +6,6 @@ set_property(TARGET simple_generator PROPERTY CXX_STANDARD 23)
 
 add_executable(coro_thread_sync thread_sync.cpp)
 set_property(TARGET coro_thread_sync PROPERTY CXX_STANDARD 23)
+
+add_executable(coro_thread_loop_sync thread_sync_loop.cpp)
+set_property(TARGET coro_thread_loop_sync PROPERTY CXX_STANDARD 23)
