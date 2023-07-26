@@ -1,15 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(cxx-examples)
 
-function (create_executable)
-    if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=leak")
-    endif ()
-    cmake_parse_arguments(THIS "" "TARGET" "SOURCES" ${ARGV})
-    add_executable(${THIS_TARGET} ${THIS_SOURCES})
-    set_property(TARGET ${THIS_TARGET} PROPERTY CXX_STANDARD 23)
-endfunction ()
-
 add_subdirectory(3rdParty/glad)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glad/include")
 
@@ -21,6 +12,10 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/backends")
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glm")
+
+set(BOOST_ROOT "3rdParty/boost")
+add_subdirectory(3rdParty/boost)
+
 
 add_library(ImGui STATIC
     "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/imgui.cpp"
@@ -34,6 +29,16 @@ add_library(ImGui STATIC
     "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/backends/imgui_impl_glfw.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/backends/imgui_impl_opengl3.h"
 )
+
+function (create_executable)
+    if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=leak")
+    endif ()
+    cmake_parse_arguments(THIS "" "TARGET" "HEADERS;SOURCES;LIBS" ${ARGV})
+    add_executable(${THIS_TARGET} ${THIS_SOURCES})
+    target_link_libraries(${THIS_TARGET} PRIVATE ${THIS_LIBS} Boost::stacktrace_basic)
+    set_property(TARGET ${THIS_TARGET} PROPERTY CXX_STANDARD 23)
+endfunction ()
 
 add_subdirectory(dll-injection)
 add_subdirectory(atomic_flags)

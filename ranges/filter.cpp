@@ -2,11 +2,15 @@
 #include <vector>
 #include <ranges>
 
+#include <boost/stacktrace.hpp>
+
 struct Entry {
     int id;
 };
 
 int main() {
+    std::cout << boost::stacktrace::stacktrace() << std::endl;
+
     const std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
     auto even_numbers = numbers | std::views::filter([](int x) { return x % 2 == 0; });
