@@ -16,6 +16,8 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/glm")
 set(BOOST_ROOT "3rdParty/boost")
 add_subdirectory(3rdParty/boost)
 
+add_subdirectory(3rdParty/game_assets)
+
 
 add_library(ImGui STATIC
     "${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/imgui.cpp"
